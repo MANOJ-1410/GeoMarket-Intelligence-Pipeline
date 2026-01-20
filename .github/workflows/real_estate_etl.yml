@@ -1,0 +1,29 @@
+name: Weekly Real Estate ETL
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  run-etl:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/Checkout@v3
+
+        - name: Set up Python
+          uses: actions/setup-python@v4
+          with: 
+            python-version: '3.10'
+
+        - name: Install dependencies
+          run: |
+            pip install pandas requests sqlalchemy psycopg2-binary python-dotenv openpyxl
+
+        - name: Run ETL Script
+          env: 
+            RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+            DB_URL: ${{ secrets.DATABASE_URL }}
+          run: python main.py
+          
