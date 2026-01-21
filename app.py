@@ -5,7 +5,11 @@ from sqlalchemy import create_engine
 
 # 1. DATABASE CONNECTION
 # Use the same credentials as your main.py
-DB_URL = "postgresql://myuser:mypassword@127.0.0.1:5432/real_estate_db"
+if "DB_URL" in st.secrets:
+    DB_URL = st.secrets["DB_URL"]
+else:
+    DB_URL = "postgresql://myuser:mypassword@127.0.0.1:5432/real_estate_db"
+
 engine = create_engine(DB_URL)
 
 # 2. CONFIGURATION & STYLING
