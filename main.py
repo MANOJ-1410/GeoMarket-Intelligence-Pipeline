@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import time
 import logging
-import hashlib  #for creating unique ID's
 import os 
 from dotenv import load_dotenv
 load_dotenv()
@@ -191,7 +190,7 @@ def clean_real_estate_data(df_raw):
 DB_URL = os.getenv("DB_URL")
 engine = create_engine(DB_URL)
 
-def load_to_postgres(df):
+def load_to_postgres(df,engine_instance):
     if df.empty:
         logging.warning("No Data to load to Postgres.")
         return
@@ -201,7 +200,7 @@ def load_to_postgres(df):
     # 1. We create the properties table if it doesn't exist (Static Data)
     # 2. We create the price_history table (Temporal Data)
 
-    with engine.begin() as conn:
+    with engine_instance.begin() as conn:
         # creating Tables
         conn.execute(text(""" 
             create table if not exists properties(
@@ -307,7 +306,8 @@ if __name__ == "__main__" :
         clean_df = clean_real_estate_data(raw_data)
 
         if not clean_df.empty:
-            load_to_postgres(clean_df)
+            db_engine = get_engine()
+            load_to_postgres(clean_df,db_engine)
             logging.info("Success: data loaded to Postgres")
             clean_df.to_excel("report.xlsx", index=False)
             logging.info(f"Successfully processed {len(clean_df)} properties")

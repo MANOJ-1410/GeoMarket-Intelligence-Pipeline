@@ -10,7 +10,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout code
-          uses: actions/Checkout@v3
+          uses: actions/checkout@v3
 
         - name: Set up Python
           uses: actions/setup-python@v4
@@ -24,6 +24,6 @@ jobs:
         - name: Run ETL Script
           env: 
             RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-            DB_URL: ${{ secrets.DATABASE_URL }}
+            DB_URL: ${{ secrets.DB_URL }}
           run: python main.py
           
