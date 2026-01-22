@@ -187,7 +187,8 @@ def clean_real_estate_data(df_raw):
 
 ## LOAD to SQL
 # DB_URL = "postgresql://postgres:Supabase%402026@localhost:5432/Automate_Real_Estate_DB"
-DB_URL = "postgresql://myuser:mypassword@127.0.0.1:5432/real_estate_db"
+# DB_URL = "postgresql://myuser:mypassword@127.0.0.1:5432/real_estate_db"
+DB_URL = os.getenv("DB_URL")
 engine = create_engine(DB_URL)
 
 def load_to_postgres(df):
